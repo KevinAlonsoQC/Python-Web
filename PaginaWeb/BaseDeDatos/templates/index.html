@@ -1,0 +1,362 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FrameWorks -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <!-- Encabezado -->
+    <title>Happy Dogs {% block titulo %} {% endblock %}</title>
+    
+
+
+</head>
+
+<body>
+    <div data-role="appbar" data-expand-point="md" style="background-color: white;">
+        <a href="{% url 'inicio' %}" class="brand no-hover">
+            <img style="width: 60px; height: 45px;" src="https://images.vexels.com/media/users/3/147784/isolated/preview/a42d2e6e358d41b0b7065e752ff162c1-logotipo-de-perros-felices.png" alt="">
+        </a>
+    
+        <ul class="app-bar-menu">
+            <li><a href="{% url 'inicio' %}">Inicio</a></li>
+            <li>
+                <a href="#" class="dropdown-toggle">Mi Cuenta</a>
+
+                <ul class="d-menu" data-role="dropdown">
+
+                    {% if sesion %}
+                        {% if staff == 0 %}
+                            <li>
+                                <a href="#" class="dropdown-toggle">Mi Perfil</a>
+                                    <ul class="d-menu" data-role="dropdown">
+                                        <li><a href="{% url 'historial' %}">Historial de Compras</a></li>
+
+                                        <li><a href="{% url 'perfil' %}">Editar Perfil</a></li>
+                                    </ul>
+                            </li>
+                        {% endif %}
+                        <li><a href="{% url 'cerrar-cuenta' %}">Cerrar Sesión</a></li>
+
+                    {% else %}
+                        <li><a href="{% url 'iniciar-cuenta' %}">Iniciar Sesión</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'crear-cuenta' %}">Registrarse</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="dropdown-toggle">Catálogo</a>
+
+                <ul class="d-menu" data-role="dropdown" onclick="noCierre()">
+                    <li><a href="{% url 'producto' %}">Productos</a></li>
+                    <li><a href="{% url 'servicio' %}">Servicios</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="dropdown-toggle">Contáctanos</a>
+
+                <ul class="d-menu" data-role="dropdown" onclick="noCierre()">
+                    {% if sesion %}
+                        <li>
+                            <a href="#" class="dropdown-toggle" onclick="noCierre()">Chat En Vivo</a>
+                            <ul class="d-menu" data-role="dropdown" onclick="noCierre()">
+                                <div onclick="noCierre()"
+                                  data-role="chat"
+                                  data-welcome="Bienvenida/o. Si deseas hablar con alguien para la toma de servicios, puedes hacerlo a través de este chat"
+                                  data-title="Chat Soporte"
+                                  data-width="300"
+                                  data-height="400"
+                                  data-time-format="%d-%m-%y %H:%M:%S"
+                                  data-name="{{nombre}} {{apellido}}"
+
+                                ></div>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    <li><a href="{% url 'inicio' %}#contactos" onclick="noCierre()">Dejar Mensaje</a></li>
+                </ul>
+            </li>
+
+            {% if sesion and staff == 0 %}
+                <li><a style="color: green; font-weight: bold;" href="{% url 'suscripcion' %}"><span class="mif-star-full fg-red"></span> Suscribirme</a></li>
+                <li><a style="color: rgb(26, 138, 26); font-weight: bold;" href="{% url 'promociones' %}"><span class="mif-star-full fg-red"></span> ¡Cupones!</a></li>
+            {% endif %}
+
+            {% if sesion and staff > 0 %}
+                <li><a style="color: brown; font-weight: bold;" href="{% url 'admin' %}">Administración</a></li>
+            {% endif %}
+
+            {% if sesion and staff == 0 %}
+                <li><a style="color: green; font-weight: bold;" href="{% url 'carrito' %}"><span class="mif-shopping-basket fg-green icon"></span> Carrito</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Cuerpo -->
+    {% block cuerpo %}
+    <br><br>
+    <div class="cuerpo">
+        {% if sesion and staff == 0%}
+            <div class="row">
+
+                <div class="col-md-2"></div>
+
+                <div class="col-md-8" style="text-align: center;">
+                    <h1 style="font-weight: bold; color: aliceblue;">Happy Dogs - Tu tienda de perros favorita.</h1>
+
+                    <p style="font-weight: bold; color: aliceblue;">¡Bienvenido <span style="color: rgb(45, 170, 45);">{{nombre}} {{apellido}}</span>! Un gusto volver a verte por acá</p>
+                    <br><br><br><br><br><br><br><br><br>
+                    <p style="font-weight: bold; color: aliceblue;">¿Aún no ves nuestros productos y servicios?</p>
+                    <br>
+                    <a type="buttom" class="btn btn-success" href="{% url 'producto' %}">Productos</a>
+                    <a type="buttom" class="btn btn-success" href="{% url 'servicio' %}">Servicios</a>
+                    <hr>
+                    <div class="divider d-flex align-items-center my-4">
+                        <p class="text-center fw-bold mx-3 mb-0" style="color: white;">¿Quieres dejarnos un mensaje?</p>
+                    </div>
+                    <a type="buttom" class="btn btn-primary" href="{% url 'inicio' %}#contactos">Dejar Mensaje</a>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                </div>
+
+                <div class="col-md-2"></div>
+            </div>
+        {% elif sesion and staff > 0 %}
+            <div class="row">
+            
+                <div class="col-md-2"></div>
+            
+                <div class="col-md-8" style="text-align: center;">
+                    <h1 style="font-weight: bold; color: aliceblue;">Happy Dogs - Tu tienda de perros favorita.</h1>
+                
+                    <p style="font-weight: bold; color: aliceblue;">¡Bienvenido <span style="color: green;">{{nombre}} {{apellido}}</span>! - Iniciaste sesión como <span style="color: red;">Administrador</span> </p>
+                    <p style="font-weight: bold; color: aliceblue;">Mientras estés en tu cuenta de empleado no podrás comprar, ni interactuar como cliente</p>
+                    <br><br><br><br><br><br><br><br><br>
+                    <p style="font-weight: bold; color: aliceblue;">Puedes dirigirte a los apartados administrativos</p>
+                    <br>
+                    <a type="buttom" class="btn btn-success" href="{% url 'admin' %}">Administración</a>
+                    <hr>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                </div>
+            
+                <div class="col-md-2"></div>
+            </div>
+        {% else %}
+            <div class="row">
+
+                <div class="col-md-2"></div>
+
+                <div class="col-md-8" style="text-align: center;">
+                    <h1 style="font-weight: bold; color: aliceblue;">Happy Dogs - Tu tienda de perros favorita.</h1>
+
+                    <p style="font-weight: bold; color: aliceblue;">Los productos que hacen contento a tu mascota</p>
+                    <p style="font-weight: bold; color: aliceblue;">Todos realizados con materiales que no le harán daño</p>
+                    <br><br><br><br><br><br><br><br><br>
+                    <p style="font-weight: bold; color: aliceblue;">¿Aún no Inicias Sesión?</p>
+                    <br>
+                    <a type="buttom" class="btn btn-success" href="{% url 'iniciar-cuenta' %}">Iniciar Sesión</a>
+                    <a type="buttom" class="btn btn-success" href="{% url 'crear-cuenta' %}">Registrarme</a>
+                    <hr>
+                    <div class="divider d-flex align-items-center my-4">
+                        <p class="text-center fw-bold mx-3 mb-0" style="color: white;">O si eres Trabajador</p>
+                    </div>
+                    <a type="buttom" class="btn btn-primary" href="{% url 'iniciar-empleados' %}">Iniciar Sesión</a>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                    <br><br>
+                </div>
+
+                <div class="col-md-2"></div>
+            </div>
+        {% endif %}
+    </div>
+    <br>
+    {% if not sesion %}
+        <div id="alerta1" class="alertas2"></div>
+    {% endif %}
+    <br>
+    <hr>
+    <div data-aos="zoom-in">
+        <div class="cuerpo2">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <img style="width: 400px; height: 500px;" src="https://napsis.com/wp-content/uploads/2021/09/Quienes-somos.webp" alt="">
+                </div>
+
+                <div class="col-md-8">
+                    <h1 style="color: white; font-family:Georgia, 'Times New Roman', Times, serif; font-weight: bold; margin-top: 100px;">¿Quiénes Somos?</h1>
+
+                    <div class="col-md-8">
+                        <p style="color: white;">Somos una entidad dedicados a la comodidad de su canino, con un servicio 100% orientado a la calidad y comodidad de sus peludos.Quisimos expandir nuestro rubro y digitalizarlo de la mejor manera para nuestros clientes.</p>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+
+                <div style="height: 50%;"  class="col-4"></div>
+                
+                <div class="col-md-4">
+                    <h1 style="color: white; font-family:Georgia, 'Times New Roman', Times, serif; font-weight: bold;">Beneficios en Web</h1>
+
+                    <div class="col-md-12">
+                        <p style="color: white;">En nuestro sitio web podrás optar a distintos beneficios, en los cuales podrás canjear desde promociones con hasta 50% de descuento, hasta participar por productos exclusivos.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img style="width: 400px; height: 250px;" src="https://ouch-cdn2.icons8.com/39FLAgZp9PoohUpCdkbxPM18j2byll69axMXbVdmBAY/rs:fit:784:588/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvMTEw/L2U3MWMwMmU3LWZl/N2QtNGM4Yy05NWJj/LTczZWFkNWVlNzQ3/Ny5zdmc.png" alt="">
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div data-aos="fade-down"
+     data-aos-easing="linear"
+     data-aos-duration="1500">
+
+        <div class="separador">
+            <div class="contenido">
+                <div id="caja-burbuja" class="row">
+                    <div id="burbuja" class="col-md-4">
+                    </div>
+                    <div id="burbuja" class="col-md-4">
+                    </div>
+                    <div id="burbuja" class="col-md-4">
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <div id= "contactos" class="row">
+        <hr>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+            <h1>Contáctanos</h1>
+            <h6>¡Contestaremos a la brevedad!</h6>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row mb-2">
+                    <label class="cell-sm-2">Email</label>
+                    <div class="cell-sm-10">
+                        <input id="input1" type="email" required name="emailContacto">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="cell-sm-2">Nombre</label>
+                    <div class="cell-sm-10">
+                        <input id="input1" type="text" required name="nombreContacto">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="cell-sm-2">Apellido</label>
+                    <div class="cell-sm-10">
+                        <input id="input1" type="text" required name="apellidoContacto">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Tipo:</label>
+                        <input id="input1" type="radio" value="RECLAMO" name="tipoContacto" checked="checked"> Reclamo
+                        <input id="input1" type="radio" value="SUGERENCIA" name="tipoContacto"> Sugerencia
+                        <input id="input1" type="radio" value="AGRADECIMIENTO" name="tipoContacto"> Agradecimiento  
+                </div>
+
+                <p>Ingrese su texto. Por favor sea breve.</p>
+                <input id="input1" type="text" required name="descContacto" data-role="input">
+
+                <p>Acepto que al enviar este formulario quedarán registrados los datos que he ingresado.</p>
+                <input type="checkbox" data-role="switch" checked onclick="toggleInputState(this)">
+
+                <div class="row">
+                    <div class="cell">
+                        <button id="input1" type="submit" class="button primary" onclick="ValidacionContacto()">Enviar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% endblock %}
+    <hr>
+    <div id="final" class="row">
+
+        <div class="col-md-2">
+            <p><b>Nuestra Tienda</b></p><br>
+            <ul id="final-nav" data-role="listview">
+                <li id="link-final" data-icon="<span class='mif-home fg-pink'>"><a href="{% url 'inicio' %}">&nbsp;&nbsp; Inicio</a></li><br>
+                <li id="link-final" data-icon="<span class='mif-mail fg-blue'>"><a href="">&nbsp;&nbsp; Contáctanos</a></li><br>
+                <li id="link-final" data-icon="<span class='mif-balance-scale fg-orange'>"><a href="">&nbsp;&nbsp; Nuestras Políticas</a></li><br>
+                <li id="link-final" data-icon="<span class='mif-bubbles fg-green'>"><a href="">&nbsp;&nbsp; Preguntas Frecuentes</a></li><br>
+            </ul>
+        </div>
+
+        <div id="final-div" class="col-md-2">
+            <p><b>Redes Sociales</b></p><br>
+            <ul id="final-nav" data-role="listview">
+                <li id="link-final" data-icon="<span class='mif-instagram fg-red'>"><a href="">&nbsp;&nbsp; @happy_dogs</a></li><br>
+                <li id="link-final" data-icon="<span class='mif-facebook2 fg-red'>"><a href="">&nbsp;&nbsp; @Happy Dog's</a></li><br>
+                <li id="link-final" data-icon="<span class='mif-music fg-red'>"><a href="">&nbsp;&nbsp; @happy_dogs</a></li><br>
+            </ul>
+        </div>
+
+        <div id="final-div" class="col-md-2">
+            <p><b>Desarrollo</b></p><br>
+            <ul id="final-nav" data-role="listview">
+                <li id="link-final" data-icon="<span class='mif-embed2 fg-red'>"><a href="">&nbsp;&nbsp; Dronet Dev</a></li><br>
+            </ul>
+        </div>
+
+        <div id="final-div" class="col-md-4">
+            
+        </div>
+
+        <div id="final-div" class="col-md-2">
+
+            <img id="imagen-final" src="https://images.vexels.com/media/users/3/147784/isolated/preview/a42d2e6e358d41b0b7065e752ff162c1-logotipo-de-perros-felices.png" alt="">
+        </div>
+
+    </div>
+    
+</body>
+
+    <!-- Jquery -->
+
+    <script src="{% static 'js/java.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+</html>

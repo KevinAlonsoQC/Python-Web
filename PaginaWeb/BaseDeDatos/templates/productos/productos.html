@@ -1,0 +1,118 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Productos{% endblock %}
+
+
+{% block cuerpo %} 
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Nuestro Catálogo</h1>
+            </div>
+            
+        </div>
+
+        <form method="GET">
+            <h6 style="color: white;">Busca tu producto preferido</h6>
+            <input type="text" name="b_prd" data-role="input" data-search-button="true">
+        </form>
+        {% if messages %}
+                {% for msg in messages %}
+                    <b>{{msg}}</b>
+                {% endfor %}
+
+        {% endif %}
+    
+        <hr style="border:2px; border-color:#FFC7FE;">
+        <br><br>
+
+        <div class="row">
+        {% for v in productos %}
+            <div class="col-md-3">
+                <img src="{{ v.imagen.url }}" style="height: 300px; width: 100%;">
+                <hr class="divider" style="border: 0; border-top: 2px solid black;">
+                <h6>{{v.producto}}</h6>
+                <p>Stock: {{v.stock}}</p>
+
+                <div class="row">
+                    {% if suscrito %}
+                        <div class="col-md-6">
+                            <p style="color: green; font-weight: bold;">¡5% desct!</p>
+                            <p style="color: green; font-weight: bold;">
+                                <span style="color: rgb(255, 0, 0); text-decoration: line-through;">${{v.precio_an}}</span> - ${{v.precio}}</p>
+                        </div>
+
+                    {% else %}
+                        <div class="col-md-6">
+                            <p style="color: green; font-weight: bold;">${{v.precio}}</p>
+                        </div>
+                        
+                    {% endif %}
+                    {% if sesion and staff == 0 and v.stock > 0 %}
+                        <div class="col-md-3">
+                            <a type="button" class="btn btn-lg btn-success" href="{% url 'agregar-carrito' v.id %}">
+                                <span class="mif-add-shopping-cart fg-white"></span>
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-lg btn-success" disabled>
+                                <span class="mif-search fg-yellow"></span>
+                            </button>
+
+                        </div>
+                    {% elif 1 > v.stock %}
+                        <div class="col-md-3">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-add-shopping-cart fg-white"></span>
+                            </button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-search fg-yellow"></span>
+                            </button>
+                        </div>
+                        <p style="color: red; font-weight: bold;">Sin Stock... :(</p>
+                    {% elif staff > 0 %}
+                        <div class="col-md-3">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-add-shopping-cart fg-white"></span>
+                            </button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-search fg-yellow"></span>
+                            </button>
+                        </div>
+                        <p style="color: red; font-weight: bold;">Inicia Sesión como Cliente</p>
+                    {% else %}
+                        <div class="col-md-3">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-add-shopping-cart fg-white"></span>
+                            </button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-lg btn-success" href="" disabled>
+                                <span class="mif-search fg-yellow"></span>
+                            </button>
+                        </div>
+                        <p style="color: red;font-weight: bold;">Inicia Sesión para comprar</p>
+                    {% endif %}
+                </div> 
+            </div>
+
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% endblock %}

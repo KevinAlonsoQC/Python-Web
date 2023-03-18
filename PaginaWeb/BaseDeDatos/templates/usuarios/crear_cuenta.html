@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Registrarme{% endblock %}
+
+
+{% block cuerpo %} 
+
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Registrate</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="https://s3.amazonaws.com/whitewallets/micasino/section-images/sin-titulo-031626541283.png" style="width: 80%; height: 70%;" alt="">
+                </div>
+                <div class="col-md-8" style="background: whitesmoke;">
+            {% csrf_token %}
+
+            {% for campo in formulario %}
+
+                {% if campo.name == 'sexo' %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{campo.label}}:</label>
+                            <input type="radio" value="M" name="{{campo.name}}" checked="checked"> Mujer
+                            <input type="radio" value="H" name="{{campo.name}}"> Hombre
+                            <input type="radio" value="O" name="{{campo.name}}"> Otro  
+                    </div>
+                {% elif campo.name == 'password' %}
+                <div class="mb-3">
+                    <label for="" class="form-label">{{campo.label}}:</label>
+                
+                
+                    <input type="password"
+                        class="form-control" 
+                        name="{{campo.name}}" required
+                        id="" 
+                        aria-describedby="helpId" 
+                        placeholder="{{campo.label}}">
+                
+                </div>
+                {% elif campo.name == 'nombre_unico' or campo.name == 'suscrito'%}
+
+                {% else %}  
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{campo.label}}:</label>
+                    
+                    
+                        <input type="{{campo.field.widget.input_type}}" required
+                            class="form-control" 
+                            name="{{campo.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{campo.label}}">
+                    
+                    </div>
+                {%endif%}
+            {% endfor %}
+                <button class="btn btn-success" type="submit">Registrarme</button>
+                </div>
+                
+            </div>
+            
+        </form>
+    </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% endblock %}

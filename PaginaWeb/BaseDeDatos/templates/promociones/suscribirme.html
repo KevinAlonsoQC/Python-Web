@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Suscribirme{% endblock %}
+
+
+{% block cuerpo %} 
+
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                <h1 style="color: white;">¡Suscribirme a Grandes Beneficios!</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        
+        {% if sesion %}
+          <form class="px-4 py-3" method="POST">
+
+              {% csrf_token %}
+                <div class="card">
+                  <h5 class="card-header">Suscripción mensual: <span style="color: green;">$10.000</span></h5>
+                  <div class="card-body">
+                    <h5 class="card-title">Suscribete para aportar un granito de arena para ayudar a canes en situación de calle...</h5>
+                    <p class="card-text">Tendrás acceso a muchos beneficios y participarás por distintos premios semestrales.</p>
+                    <p class="card-text" style="text-decoration: line-through;">Este descuento solo aplica para la sección de productos.</p>
+                    <br>
+                    <button class="btn btn-success" >¡Suscribirme!</button>
+                  </div>
+                </div>
+
+            </form>
+            {% else %}
+            <div style="text-align: center;">
+              <h1 style="color: red;">¡Debes Iniciar Sesión!</h1>
+            </div>
+        {% endif %}
+          
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% endblock %}

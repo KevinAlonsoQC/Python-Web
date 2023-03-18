@@ -1,0 +1,85 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Historial De Pedidos{% endblock %}
+
+
+{% block cuerpo %} 
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br><br>
+        <div class="row">
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                <h1 style="color: white;">Tus Pedidos</h1>
+            </div>
+
+            <div class="col-2"></div>
+            <hr>
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                {% if messages %}
+                    {% for msg in messages %}
+                        <b>{{msg}}</b>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="col-2"></div>
+
+        </div>
+        <br><br>
+
+            <table class="table table-hover" style="background-color: white;">
+                <thead style="background-color: rgb(209, 204, 204);">
+                  <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Fecha Pedido</th>
+                    <th scope="col">Fecha Entrega</th>
+                    <th scope="col">N° Seguimiento</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Monto Pagado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for v in historial %}
+                        {% if v.estado == 'Preparando' %}
+                            <tr style="background-color: rgba(231, 59, 59, 0.658);">
+                                <td><p>{{ v.producto }}</p></td>
+                                <td><p>{{ v.fecha_pedido }}</p></td>
+                                <td><p>-</p></td>
+                                <td><p>-</p></td>
+                                <td><p>{{ v.estado }}</p></td>
+                                <td><p>{{ v.total }}</p</td>
+                            </tr>
+                        {% elif v.estado == 'Enviado' %}
+                            <tr style="background-color: rgba(216, 190, 41, 0.658);">
+                                <td><p>{{ v.producto }}</p></td>
+                                <td><p>{{ v.fecha_pedido }}</p></td>
+                                <td><p>{{ v.fecha_entrega}}</p></td>
+                                <td><p>{{ v.numero_seguimiento }}</p></td>
+                                <td><p>{{ v.estado }}</p></td>
+                                <td><p>{{ v.total }}</p</td>
+                            </tr>
+                        {% else %}
+                            <tr style="background-color: rgba(32, 199, 46, 0.658);">
+                                <td><p>{{ v.producto }}</p></td>
+                                <td><p>{{ v.fecha_pedido }}</p></td>
+                                <td><p>{{ v.fecha_entrega}}</p></td>
+                                <td><p>{{ v.numero_seguimiento }}</p></td>
+                                <td><p>{{ v.estado }}</p></td>
+                                <td><p>{{ v.total }}</p</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br><br><br><br><br><br><br><br>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% endblock %}

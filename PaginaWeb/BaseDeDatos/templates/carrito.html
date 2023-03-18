@@ -1,0 +1,241 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Carrito{% endblock %}
+
+
+{% block cuerpo %} 
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br><br>
+        <div class="row">
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                <h1 style="color: white;">Tu Carrito</h1>
+            </div>
+
+            <div class="col-2"></div>
+            <hr>
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                {% if messages %}
+                    {% for msg in messages %}
+                        <b>{{msg}}</b>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="col-2"></div>
+
+        </div>
+        <br><br>
+
+        <div style="background-color: white;">
+        <table class="table table-hover" style="background-color: white;">
+            <thead style="background-color: rgb(209, 204, 204);">
+              <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio Unitario</th>
+                <th scope="col">Total de Producto</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            
+            <tbody>
+                {% for carrito in carro %}
+                    <tr>
+                        <td><input type="text" name="producto" value="{{ carrito.producto }}" disabled></td>
+                        <td>
+                            <input type="number" name="cantidad" placeholder="{{carrito.cantidad}}" disabled>
+                            <a class="btn btn-success" style="color: white;" href="{% url 'aumentar-carrito' carrito.producto %}"> + </a>
+                            <a class="btn btn-danger" style="color: white;" href="{% url 'descontar-carrito' carrito.producto %}"> - </a>
+                        </td>
+                        <td><input type="number" name="precio" placeholder="{{ carrito.precio }}" value="{{ carrito.precio }}" disabled></td>
+                        <td><input type="number" name="total" placeholder="{{ carrito.total }}" value="{{ carrito.total }}" disabled></td>
+                        <td><a class="btn btn-danger" style="color: white;" href="{% url 'delete-carrito' carrito.producto %}"> Eliminar </a></td>
+                    </tr>
+                {% endfor %}
+                {% if disponible %}
+                    <tr>
+                        <td colspan="5" class="table-active" style="font-weight: bold;">Monto total a pagar:  <span style="color: green;">${{ pagar }}</span></td>
+                    </tr>
+                {% endif %}
+            </tbody>
+          </table>
+            <br><br><br><br><br><br><br><br>
+            {% if disponible %}
+                {% if zona_pago %}
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample">
+                                 Pagar ${{ pagar }}
+                            </a>
+
+                        </div>
+                        <div class="col-md-8">
+                            <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                                Zona de Envío
+                            </a>
+                        </div>
+
+                        <div class="col-md-2">
+                            <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample4" role="button" aria-controls="offcanvasExample">
+                                Canjear Cupón
+                            </a>
+                        </div>
+
+                    </div>
+                {% else %}
+                    <div class="row">
+                        
+                        <div class="col-md-2">
+                            <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample3" role="button" aria-controls="offcanvasExample">
+                                Pagar ${{ pagar }}
+                            </a>
+
+                        </div>
+                        <div class="col-md-8">
+                            <a class="btn btn-warning" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                                Zona de Envío
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="btn btn-secondary" style="color: white;" href="" disable>Canjear Cupón</p>
+                        </div>
+
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="row">
+                    <div class="col-md-10">
+                        <p class="btn btn-secondary" style="color: white;" href="" disable>Carrito Vacío</p>
+                    </div>
+
+                    <div class="col-md-2">
+                        <p class="btn btn-secondary" style="color: white;" href="" disable>Canjear Cupón</p>
+                    </div>
+
+                </div>
+            {% endif %}
+
+    </div>  
+
+    <form method="GET">
+        {% csrf_token %}
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="height: 450px; top: 25%;">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ingresa donde recibirás el envio</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body">
+              <div class="row">
+
+                <div class="col-md-12">
+                    <p>Calle:</p>
+                    <input type="text" name="calle" placeholder="Ejemplo#1234" required>
+                </div>
+
+                <div class="col-md-12">
+                    <p>Comuna:</p>
+                    <input type="text" name="comuna" placeholder="Comuna" required> 
+                </div>
+                <div class="col-md-12">
+                    <p>Ciudad:</p>
+                    <input type="text" name="ciudad" placeholder="Ciudad" required> 
+                </div>
+                <br>
+                <p style="color: rgb(184, 184, 60); font-weight: bold;">Primero ingresa la zona de envío porfavor. De lo contrario, no se procesará el pago</p>
+                <button class="btn btn-success" type="submit">Actualizar Envio</button>
+              </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample4" aria-labelledby="offcanvasExampleLabel4" style="height: 450px; top: 25%;">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasExampleLabel4">Mis Cupones Disponibles:</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="row">
+                    {% if promocionados.cliente == unico_cliente %}
+                        <div class="col-md-12">
+                            <p><span style="font-weight: bold;">Promoción:</span> {{promocionados.promocion_name}}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p><span style="font-weight: bold;">Descuento:</span> {{promocionados.porcentaje_descuento}}% <span class="mif-tag mif-2x fg-green"></span></p>
+                        </div>
+                        <div class="col-md-12">
+                            <p><span style="font-weight: bold;">Válido Hasta:</span> {{promocionados.vencimiento}} <span class="mif-event-available mif-2x fg-green"></span></p>
+                        </div>
+
+                        <p style="color: rgb(184, 184, 60); font-weight: bold;">¿Quieres utilizar tu cupón?</p>
+                        <a class="btn btn-success" style="color: white;" href="{% url 'activar_promocion' %}">Utilizar cupón</a>
+                    {% else %} 
+                        <div class="col-md-12">
+                            <p>No tienes cupones para utilizar :(</p>
+                        </div>
+                        <div class="col-md-12">
+                            <a class="btn btn-success" type="buttom" style="color: rgb(0, 0, 0); font-weight: bold;" href="{% url 'promociones' %}"><span class="mif-star-full fg-red"></span> ¡Cupones!</a>
+                        </div>
+                    {% endif %}
+                <br>
+
+              </div>
+        </div>
+    </div>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel2" style="height: 450px; top: 25%;">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasExampleLabel2">Finaliza tu pago :D</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <div class="row">
+                    <p>Se enviará a la siguiente dirección:</p>
+                    <div class="col-md-12">
+                        <p>Calle:</p>
+                        <input type="text" placeholder="{{calle_envio}}" disabled>
+                    </div>
+
+                    <div class="col-md-12">
+                        <p>Comuna:</p>
+                        <input type="text" placeholder="{{comuna_envio}}" disabled> 
+                    </div>
+                    <div class="col-md-12">
+                        <p>Ciudad:</p>
+                        <input type="text" placeholder="{{ciudad_envio}}" disabled> 
+                    </div>
+
+                    <br>
+
+                    <p style="color: rgb(184, 184, 60); font-weight: bold;">Si la zona de envío no es correcta. Actualizala porfavor</p>
+                    <a class="btn btn-success" style="color: white;" href="{% url 'pagar' %}">Pagar ${{ pagar }}</a>
+                  </div>
+            </div>
+        </div>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample3" aria-labelledby="offcanvasExampleLabel3" style="height: 450px; top: 25%;">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasExampleLabel3">Finaliza tu pago :D</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+        
+            <div class="offcanvas-body">
+                <div class="row">
+                    <p style="color: rgb(184, 184, 60); font-weight: bold;">Actualiza la zona de envio para pagar!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% endblock %}

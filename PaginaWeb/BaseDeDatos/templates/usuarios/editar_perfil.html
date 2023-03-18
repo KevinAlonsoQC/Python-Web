@@ -1,0 +1,186 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Editar Perfil{% endblock %}
+
+
+{% block cuerpo %} 
+
+
+{% if sesion %}
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                <h1 style="color: white;">Editar Perfil</h1>
+            </div>
+
+            <div class="col-2"></div>
+            <hr>
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                {% if messages %}
+                    {% for msg in messages %}
+                        <b>{{msg}}</b>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="col-2"></div>
+
+        </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="https://www.drafabiola.com/imagenes/perfil.png" style="width: 80%; height: 80%;" alt="">
+                </div>
+
+
+                <div class="col-md-8 rounded-3" style="background: whitesmoke;">
+                    <form method="POST">
+                        {% csrf_token %}
+                    <div class="row">
+                            <div class="col-md-6">
+                                <p>Nombre:</p>
+                                <input type="text" name="nameEdit" placeholder="{{ nombre }}" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <p>Apellido:</p>
+                                <input type="text" name="apellidoEdit" placeholder="{{ apellido }}" required> 
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Celular:</label>
+                                <input type="number" name="celularEdit" min="900000000" max="999999999" required>
+                            </div>
+
+                            <div class="col-md-6"></div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">País:</label>
+                                <input type="text" name="paisEdit" required>
+                            </div>
+
+                            <div class="col-md-6"></div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ciudad:</label>
+                                <input type="text" name="ciudadEdit" required>
+                            </div>
+
+                            <div class="col-md-6"></div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Comuna:</label>
+                                <input type="text" name="comunaEdit" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Sexo:</label>
+                                    <input type="radio" value="M" name="sexoEdit" checked="checked"> Mujer
+                                    <input type="radio" value="H" name="sexoEdit"> Hombre
+                                    <input type="radio" value="O" name="sexoEdit"> Otro  
+                            </div>
+                            <p style="color: rgb(184, 184, 60); font-weight: bold;">Al aceptar los cambios tu sesión será cerrada automáticamente.</p>
+                            <div class="col-md-3">
+                                <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+                            </div>
+                        </form>
+
+                        <div class="col-md-4"></div>
+                    
+                        <div class="col-md-5">
+                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                                Editar Correo
+                            </a>
+
+                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">
+                                Editar Contraseña
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <form method="GET">
+                {% csrf_token %}
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="height: 450px; top: 25%;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ingresa tu nuevo Correo</h5>
+                      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                      <div class="row">
+
+                        <div class="col-md-12">
+                            <p>Nuevo Correo:</p>
+                            <input type="text" name="newCorreo" placeholder="{{ correo }}" required>
+                        </div>
+
+                        <div class="col-md-12">
+                            <p>Repetir Nuevo Correo:</p>
+                            <input type="text" name="newCorreoRep" placeholder="{{ correo }}" required> 
+                        </div>
+                        <br>
+                        <p style="color: rgb(184, 184, 60); font-weight: bold;">Al aceptar los cambios tu sesión será cerrada automáticamente.</p>
+                        <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+                      </div>
+                    </div>
+                </div>
+            </form>
+
+            <form method="GET">
+                {% csrf_token %}
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel2" style="height: 450px; top: 25%;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasExampleLabel2">Ingresa tu nueva Contraseña</h5>
+                      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                      <div class="row">
+
+                        <div class="col-md-12">
+                            <p>Nueva Contraseña:</p>
+                            <input type="password" name="newPass" placeholder="**********">
+                        </div>
+
+                        <div class="col-md-12">
+                            <p>Repetir Nueva Contraseña:</p>
+                            <input type="password" name="newPassRep" placeholder="**********"> 
+                        </div>
+                        <br>
+                        <p style="color: rgb(184, 184, 60); font-weight: bold;">Al aceptar los cambios tu sesión será cerrada automáticamente.</p>
+                        <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+                      </div>
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+{% else %}
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-2"></div>
+
+            <div class="col-8" style="text-align: center;">
+                <h1 style="color: rgb(255, 0, 0);">No tienes sesión Iniciada.</h1>
+            </div>
+            
+        </div>
+        <hr>
+    </div>
+</div>
+{% endif %}
+<br>
+<br>
+<br>
+{% endblock %}

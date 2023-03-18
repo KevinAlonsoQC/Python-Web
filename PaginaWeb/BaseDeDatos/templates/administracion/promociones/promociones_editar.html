@@ -1,0 +1,95 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Editar Promociones{% endblock %}
+
+
+{% block cuerpo %} 
+{% if staff > 3 %}
+
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Edita la Promoción</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for v in formulario %}
+                {% if v.name == 'fecha_inicio' %}
+                
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                    
+                        <input type="date" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% elif v.name == 'fecha_fin' %}
+                
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                    
+                        <input type="date" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                        <input type="{{v.field.widget.input_type}}" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+            <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+{% else %}
+<br>
+<div class="row">
+    <div class="col-4"></div>
+
+    <div class="col-8">
+        <h1 style="color: rgb(255, 0, 0);">Acceso Denegado</h1>
+    </div>
+
+</div>
+
+<hr>
+{% endif %}
+{% endblock %}

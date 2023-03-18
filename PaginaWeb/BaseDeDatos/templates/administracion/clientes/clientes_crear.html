@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Crear Clientes{% endblock %}
+
+
+{% block cuerpo %} 
+{% if staff > 4 %}
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Crear Clientes</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for campo in formulario %}
+
+                {% if campo.name == 'sexo' %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{campo.label}}:</label>
+                            <input type="radio" value="M" name="{{campo.name}}" checked="checked"> Mujer
+                            <input type="radio" value="H" name="{{campo.name}}"> Hombre
+                            <input type="radio" value="O" name="{{campo.name}}"> Otro  
+                    </div>
+                {% elif campo.name == 'password' %}
+                <div class="mb-3">
+                    <label for="" class="form-label">{{campo.label}}:</label>
+                
+                
+                    <input type="password"
+                        class="form-control" 
+                        name="{{campo.name}}" required
+                        id="" 
+                        aria-describedby="helpId" 
+                        placeholder="{{campo.label}}">
+                
+                </div>
+                {% elif campo.name == 'nombre_unico' or campo.name == 'suscrito'%}
+
+                {% else %}  
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{campo.label}}:</label>
+                    
+                    
+                        <input type="{{campo.field.widget.input_type}}" required
+                            class="form-control" 
+                            name="{{campo.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{campo.label}}">
+                    
+                    </div>
+                {%endif%}
+            
+            {% endfor %}
+            <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+        </form>
+    </div>
+    </div>
+</div>
+{% else %}
+<br>
+<div class="row">
+    <div class="col-4"></div>
+
+    <div class="col-8">
+        <h1 style="color: rgb(255, 0, 0);">Acceso Denegado</h1>
+    </div>
+
+</div>
+
+<hr>
+{% endif %}
+<br>
+<br>
+<br>
+{% endblock %}

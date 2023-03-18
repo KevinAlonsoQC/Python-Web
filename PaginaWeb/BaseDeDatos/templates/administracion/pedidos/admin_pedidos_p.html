@@ -1,0 +1,160 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Pedidos Pendientes{% endblock %}
+
+
+{% block cuerpo %} 
+{% if staff > 0 %}
+    <div data-aos="zoom-in">
+        <div class="cuerpo2">
+            <br>
+            <div class="row">
+                <div class="col-4"></div>
+
+                <div class="col-8">
+                    <h1 style="color: white;">Pedidos Pendientes</h1>
+                </div>
+
+            </div>
+
+            <hr>
+            {% if messages %}
+                {% for msg in messages %}
+                    <b>{{msg}}</b>
+                {% endfor %}
+
+            {% endif %}
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <form method="GET">
+                        <h6 style="color: white;">Buscar Pedidos por N° de Seguimiento...</h6>
+                        <input type="text" name="b_pedido_pendiente" data-role="input" data-search-button="true">
+                    </form>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-2">
+                    <ul class="v-menu">
+                        <li class="menu-title">General</li>
+                        <li><a href="{% url 'admin' %}"><span class="mif-home fg-pink icon"></span> Inicio</a></li>
+                        <li><a href="{% url 'bandeja-admin' %}"><span class="mif-inbox fg-blue icon"></span>Bandeja</a></li>
+
+                        <li class="menu-title">Pedidos</li>
+                        <li><a href="{% url 'pedidos-entregados' %}"><span class="mif-checkmark fg-green icon"></span> Pedidos Entregados</a></li>
+                        <li><a href="{% url 'pedidos-enviados' %}"><span class="mif-truck fg-yellow icon"></span> Pedidos Enviados</a></li>
+                        <li><a href="{% url 'pedidos-pendientes' %}"><span class="mif-dropbox fg-red icon"></span> Pedidos Pendientes</a></li>
+                    
+                        <li class="menu-title">Administrativo</li>
+                        <li>
+                            <a href="#" data-hotkey="Alt+1"><span class="mif-books fg-brown icon"></span>Catálogo</a>
+                            <ul class="v-menu" data-role="dropdown">
+                                <li><a href="{% url 'productos-admin' %}"><span class="mif-cart fg-green icon"></span>Ver Productos</a></li>
+                                <li><a href="{% url 'servicios-admin' %}"><span class="mif-shop fg-green icon"></span>Ver Servicios</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" data-hotkey="Alt+2"><span class="mif-gift fg-orange icon"></span>Promociones</a>
+                            <ul class="v-menu" data-role="dropdown">
+                                <li><a href="{% url 'promociones-admin' %}"><span class="mif-favorite fg-green icon"></span>Ver Promociones</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" data-hotkey="Alt+3"><span class="mif-paw fg-red icon"></span>Staff</a>
+                            <ul class="v-menu" data-role="dropdown">
+                                <li><a href="{% url 'staff-admin' %}"><span class="mif-star-full fg-green icon"></span>Cuentas Administrativas</a></li>
+                                <li><a href="{% url 'clientes-admin' %}"><span class="mif-users fg-green icon"></span>Cuentas Clientes</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-1"></div>
+                
+                <div class="col-md-9">
+                <div class="row">
+                {% for v in pedidos %}
+                    <div class="card mb-4" style="max-width: 450px;">
+                        <div class="row g-0">
+                          <div class="col-md-12">
+                            <div class="card-body" >
+                              <h5 class="card-title">Cliente: <span style="font-weight: bold; color: green;">{{v.cliente}}</span></h5>
+                              <p class="card-text" style="width: 100%;"><b>ID:</b> {{v.id}}</p>
+                              <p class="card-text" style="width: 100%;"><b>Pedidos:</b> {{v.producto}}</p>
+    
+                                <p class="card-text">
+                                    <small class="text"> 
+                                        <span style="font-weight: bold;">Fecha Pedido: {{v.fecha_pedido}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: yellowgreen;">Prioridad: {{v.prioridad}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text">
+                                        <span style="font-weight: bold; color: green;">Monto Pagado: {{ v.total }}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: red;">Estado: {{v.estado}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: green;">N° de Seguimiento: {{v.numero_seguimiento}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: rgb(115, 128, 0);">Calle de Envío: {{v.calle_envio}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: rgb(115, 128, 0);">Comuna de Envío: {{v.comuna_envio}}</span>
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span style="font-weight: bold; color: rgb(115, 128, 0);">Ciudad de Envío: {{v.ciudad_envio}}</span>
+                                    </small>
+                                </p>
+                                <br>
+
+                                <a href="{% url 'editar-pedidos' v.id %}" class="btn btn-success" role="button">Editar</a>
+                                <a href="{% url 'eliminar-pendientes' v.id %}" class="btn btn-danger" role="button">Eliminar</a>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+<br>
+<div class="row">
+    <div class="col-4"></div>
+
+    <div class="col-8">
+        <h1 style="color: rgb(255, 0, 0);">Acceso Denegado</h1>
+    </div>
+
+</div>
+
+<hr>
+{% endif %}
+<br>
+<br>
+<br>
+{% endblock %}

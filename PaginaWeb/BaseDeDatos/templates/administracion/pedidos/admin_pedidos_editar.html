@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Editar Pedido{% endblock %}
+
+
+{% block cuerpo %} 
+{% if staff > 0 %}
+
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Edita el Pedido</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for v in formulario %}
+
+                {% if v.name == 'fecha_pedido' %}
+                    <p>La fecha del pedido es {{v.value}}. <span style="color: red;">NO MODIFICAR</span></p>
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                    
+                        <input type="date" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% elif v.name == 'fecha_entrega' %}
+                    <p>Si aún no ha sido entregado o enviado solo ingresa la misma fecha de Fecha Pedido</p>
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                    
+                        <input type="date" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% elif v.name == 'estado' %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                            <input type="radio" value="Preparando" name="{{v.name}}" checked="checked"> Preparando
+                            <input type="radio" value="Enviado" name="{{v.name}}"> Enviado
+                            <input type="radio" value="Entregado" name="{{v.name}}"> Entregado  
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                    
+                        <input type="{{v.field.widget.input_type}}" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value | default:''}}"
+                            value="{{v.value | default:''}}">
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+            <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+{% else %}
+<br>
+<div class="row">
+    <div class="col-4"></div>
+
+    <div class="col-8">
+        <h1 style="color: rgb(255, 0, 0);">Acceso Denegado</h1>
+    </div>
+
+</div>
+
+<hr>
+{% endif %}
+<br>
+<br>
+<br>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% block titulo %}| Editar Clientes{% endblock %}
+
+
+{% block cuerpo %} 
+{% if staff > 4 %}
+<div data-aos="zoom-in">
+    <div class="cuerpo2">
+        <br>
+        <div class="row">
+            <div class="col-4"></div>
+
+            <div class="col-8">
+                <h1 style="color: white;">Edita el Cliente</h1>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <b>{{msg}}</b>
+            {% endfor %}
+
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for v in formulario %}
+                
+                {% if v.name == 'sexo' %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                            <input type="radio" value="M" name="{{v.name}}" checked="checked"> Mujer
+                            <input type="radio" value="H" name="{{v.name}}"> Hombre
+                            <input type="radio" value="O" name="{{v.name}}"> Otro  
+                    </div>
+                {% elif v.name == 'suscrito' %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                            <input type="radio" value="True" name="{{v.name}}"> Si
+                            <input type="radio" value="False" name="{{v.name}}" checked="checked"> No
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">{{v.label}}:</label>
+                        <input type="{{v.field.widget.input_type}}" required
+                            class="form-control" 
+                            name="{{v.name}}" 
+                            id="" 
+                            aria-describedby="helpId" 
+                            placeholder="{{v.value}}"
+                            value="{{v.value}}">
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+            <button class="btn btn-success" type="submit">Aceptar Cambios</button>
+        </form>
+    </div>
+    </div>
+</div>
+{% else %}
+<br>
+<div class="row">
+    <div class="col-4"></div>
+
+    <div class="col-8">
+        <h1 style="color: rgb(255, 0, 0);">Acceso Denegado</h1>
+    </div>
+
+</div>
+
+<hr>
+{% endif %}
+<br>
+<br>
+<br>
+{% endblock %}
